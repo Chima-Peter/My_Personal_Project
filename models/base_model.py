@@ -2,8 +2,9 @@
 """
 This module contains the BaseModel class
 """
-import datetime
+from datetime import datetime
 import uuid
+
 
 class BaseModel:
     """
@@ -27,3 +28,18 @@ class BaseModel:
         Returns user-readable string to stdout
         """
         return "[BaseModel] ({}) {}".format(self.id, self.__dict__)
+
+    def save(self):
+        """
+        updates the attribute updated_at with the current datetime
+        """
+        self.updated_at = datetime.now()
+
+    def to_dict(self):
+        """
+        returns a dictionary of all keys/values of __dict__ of the instance
+        """
+        self.created_at = self.created_at.isoformat()
+        self.updated_at = self.updated_at.isoformat()
+        self.__dict__["__class__"] = "BaseModel"
+        return self.__dict__
