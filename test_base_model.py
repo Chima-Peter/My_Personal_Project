@@ -16,3 +16,11 @@ for key in my_model_json.keys():
 
 first = BaseModel()
 print(type(first.created_at))
+print("--")
+my_new_model = BaseModel(**my_model_json)
+print(my_new_model.id)
+print(my_new_model)
+print(type(my_new_model.created_at))
+
+print("--")
+print(my_model is my_new_model)

@@ -3,25 +3,37 @@
 This module contains the BaseModel class
 """
 from datetime import datetime
+from __init__ import storage
 import uuid
 
 
 class BaseModel:
     """
-    The class thatb defines all common attributes/methods for other classes
+    The class that defines all common attributes/methods for other classes
     """
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         """
         Initialisation of the class with attributes
             id
             created_at
             updated_at
+            args
+            kwargs
         """
-        self.id = uuid.uuid4()
-        self.id = str(self.id)
-        self.created_at = datetime.now()
         self.updated_at = datetime.now()
+        if len(kwargs) == 0:
+            self.id = uuid.uuid4()
+            self.id = str(self.id)
+            self.created_at = datetime.now()
+            storage.new(self.__dict__)
+        else:
+            for key in kwargs:
+                value = kwargs[key]
+                if key != "__class__":
+                    if key == "updated_at" or key == "created_at":
+                        value = datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%f')
+                    setattr(self, key, value)
 
     def __str__(self):
         """
@@ -33,6 +45,7 @@ class BaseModel:
         """
         updates the attribute updated_at with the current datetime
         """
+        storage.save()
         self.updated_at = datetime.now()
 
     def to_dict(self):
