@@ -32,15 +32,6 @@ class FileStorage:
         """
         serializes __objects to the JSON file (path: __file_path)
         """
-        if path.exists(FileStorage.__file_path):
-            with open(FileStorage.__file_path, "r+") as f:
-                lines = f.read()
-                data = json.loads(lines)
-                for key, value in FileStorage.__objects.copy().items():
-                    temp = BaseModel(value)
-                    data[key] = temp.to_dict()
-                json.dump(data, f)
-                print(data)
         with open(FileStorage.__file_path, "w+", encoding="utf-8") as f:
             serialised_dict = {}
             for key, value in FileStorage.__objects.items():
