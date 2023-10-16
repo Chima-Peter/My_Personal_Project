@@ -3,7 +3,7 @@
 This module contains the BaseModel class
 """
 from datetime import datetime
-from models.__init__ import storage
+import models
 import uuid
 
 
@@ -26,7 +26,7 @@ class BaseModel:
             self.id = uuid.uuid4()
             self.id = str(self.id)
             self.created_at = datetime.now()
-            storage.new(self)
+            models.storage.new(self)
         else:
             for key in kwargs:
                 value = kwargs[key]
@@ -46,7 +46,7 @@ class BaseModel:
         updates the attribute updated_at with the current datetime
         """
         self.updated_at = datetime.now()
-        storage.save()
+        models.storage.save()
         
 
     def to_dict(self):

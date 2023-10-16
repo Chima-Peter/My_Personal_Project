@@ -3,6 +3,7 @@
 Module containing the classs FileStorage
 """
 import json
+from models.base_model import BaseModel
 from os import path
 
 class FileStorage:
@@ -35,13 +36,15 @@ class FileStorage:
             with open(FileStorage.__file_path, "r+") as f:
                 lines = f.read()
                 data = json.loads(lines)
-                for key, value in FileStorage.__objects.items():
-                    data[key] = value.to_dict()
+                for key, value in FileStorage.__objects.copy().items():
+                    temp = BaseModel(value)
+                    data[key] = temp.to_dict()
                 json.dump(data, f)
+                print(data)
         with open(FileStorage.__file_path, "w+", encoding="utf-8") as f:
             serialised_dict = {}
             for key, value in FileStorage.__objects.items():
-                serialised_dict[key] = value.to_dict()
+                serialised_dict[key] = value.to_dict
             json.dump(serialised_dict, f)
 
     def reload(self):
@@ -54,6 +57,5 @@ class FileStorage:
                 data = json.loads(lines)
                 FileStorage.__objects = {}
                 for key, value in data.items():
-                    class_name, class_id = key.split(".")
-                    FileStorage.__objects[key] = value
-     
+                    base_model = BaseModel(value)
+                    FileStorage.__objects["BaseModel"] = base_model.__dict__
